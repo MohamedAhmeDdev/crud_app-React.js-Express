@@ -2,21 +2,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import axios from "axios";
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
  
 const EditProduct = () => {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
-    const history = useHistory();
+    const [description, setDescription] = useState('');
+    let navigate = useNavigate();
     const { id } = useParams();
  
     const updateProduct = async (e) => {
         e.preventDefault();
         await axios.patch(`http://localhost:5000/products/${id}`,{
             title: title,
-            price: price
+            price: price,
+            description: description
         });
-        history.push("/");
+       
+        navigate("/");
     }
  
     useEffect(() => {
@@ -27,6 +30,7 @@ const EditProduct = () => {
         const response = await axios.get(`http://localhost:5000/products/${id}`);
         setTitle(response.data.title);
         setPrice(response.data.price);
+        setDescription(response.data.description);
     }
  
     return (
@@ -53,6 +57,18 @@ const EditProduct = () => {
                         onChange={ (e) => setPrice(e.target.value) }
                     />
                 </div>
+
+                <div className="field">
+                    <label className="label">description</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="description"
+                        value={ description }
+                        onChange={ (e) => setDescription(e.target.value) }
+                    />
+                </div>
+ 
  
                 <div className="field">
                     <button className="button is-primary">Update</button>

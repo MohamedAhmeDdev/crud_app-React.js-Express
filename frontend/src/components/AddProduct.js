@@ -1,20 +1,22 @@
 
 import { useState } from 'react'
 import axios from "axios";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
  
 const AddProduct = () => {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
-    const history = useHistory();
+    const [description, setDescription] = useState('');
+    let navigate = useNavigate();
  
     const saveProduct = async (e) => {
         e.preventDefault();
         await axios.post('http://localhost:5000/products',{
             title: title,
-            price: price
+            price: price,
+            description: description
         });
-        history.push("/");
+        navigate("/");
     }
  
     return (
@@ -39,6 +41,17 @@ const AddProduct = () => {
                         placeholder="Price"
                         value={ price }
                         onChange={ (e) => setPrice(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">description</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="description"
+                        value={ description }
+                        onChange={ (e) => setDescription(e.target.value) }
                     />
                 </div>
  
